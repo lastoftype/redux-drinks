@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import DevTools from './DevTools';
 import User from './User';
-import users from './users';
+import users from './data/users';
 
 class App extends Component {
   render() {
