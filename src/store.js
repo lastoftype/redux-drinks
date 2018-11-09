@@ -6,6 +6,7 @@ import DevTools from './DevTools';
 const INITIAL_STATE = {
   loading: false,
   activeUser: {},
+  users: [],
 };
 
 // Reducer
@@ -15,6 +16,8 @@ const appReducer = (state = INITIAL_STATE, action) => {
       return { ...state, loading: action.payload };
     case 'SET_USER':
       return { ...state, activeUser: action.payload };
+    case 'SET_USERS':
+      return { ...state, users: action.payload };
     default:
       return state;
   }
@@ -28,6 +31,16 @@ export const setUser = ({ name, id, email }) => ({
     id,
     email,
   },
+});
+
+export const setUsers = users => ({
+  type: 'SET_USERS',
+  payload: users,
+});
+
+export const setLoading = bool => ({
+  type: 'SET_LOADING',
+  payload: bool,
 });
 
 // Store
