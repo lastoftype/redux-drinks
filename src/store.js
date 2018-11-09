@@ -1,12 +1,16 @@
 import { applyMiddleware, createStore, compose } from 'redux';
 import logger from 'redux-logger';
 import DevTools from './DevTools';
+import createSagaMiddleware from 'redux-saga';
+import sagas from './sagas';
+
+const sagaMiddleware = createSagaMiddleware();
 
 // State
 const INITIAL_STATE = {
   loading: false,
-  activeUser: {},
-  users: [],
+  activeShip: {},
+  ships: [],
 };
 
 // Reducer
@@ -18,40 +22,27 @@ const appReducer = (state = INITIAL_STATE, action) => {
       return { ...state, activeUser: action.payload };
     case 'SET_USERS':
       return { ...state, users: action.payload };
+    case 'SET_STARSHIPS':
+      return { ...state, ships: action.payload };
+    case 'SET_ACTIVE_SHIP':
+      return { ...state, activeShip: action.payload };
     default:
       return state;
   }
 };
 
-// Actions
-export const setUser = ({ name, id, email }) => ({
-  type: 'SET_USER',
-  payload: {
-    name,
-    id,
-    email,
-  },
-});
-
-export const setUsers = users => ({
-  type: 'SET_USERS',
-  payload: users,
-});
-
-export const setLoading = bool => ({
-  type: 'SET_LOADING',
-  payload: bool,
-});
-
 // Store
 function configureStore(initialState = INITIAL_STATE) {
+  const middlewares = [logger, sagaMiddleware];
   const enhancer = compose(
-    applyMiddleware(logger),
+    applyMiddleware(...middlewares),
     DevTools.instrument(),
   );
   return createStore(appReducer, initialState, enhancer);
 }
 
 const store = configureStore();
+
+sagaMiddleware.run(sagas);
 
 export default store;

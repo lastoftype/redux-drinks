@@ -2,47 +2,30 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import DevTools from './DevTools';
-import User from './User';
 
 // Redux
-import { setUsers, setLoading } from './store';
+import { getSpaceships, setUsers, setLoading } from './actions';
 
 class App extends Component {
   componentDidMount() {
-    this.props.setLoading(true);
-    fetch('http://localhost:4000/users')
-      .then(response => response.json())
-      .then(users => {
-        this.props.setUsers(users);
-        this.props.setLoading(false);
-      });
+    this.props.getSpaceships();
   }
 
   render() {
     return (
       <div className="App">
-        {this.props.loading === true ? (
-          <div className="loading">LOADING...</div>
-        ) : (
-          <section className="UserGrid">
-            {this.props.users.map((user, i) => (
-              <User id={user.id} key={i} name={user.name} email={user.email} />
-            ))}
-          </section>
-        )}
+        <pre style={{ background: '#222', color: '#efefef', margin: '0', padding: '20px', fontSize: '20px' }}>
+          {JSON.stringify(this.props, null, ' ')}
+        </pre>
         <DevTools />
       </div>
     );
   }
 }
 
-const mapStateToProps = state => ({
-  activeUser: state.activeUser,
-  users: state.users,
-  loading: state.loading,
-});
+const mapStateToProps = state => state;
 
-const mapDispatchToProps = { setUsers, setLoading };
+const mapDispatchToProps = { setUsers, setLoading, getSpaceships };
 
 export default connect(
   mapStateToProps,

@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 // Redux actions
-import { setUser } from './store';
+import { setUser } from './actions';
 
 const User = props => {
   return (
